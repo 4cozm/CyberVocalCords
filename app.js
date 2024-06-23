@@ -42,10 +42,6 @@ client.on("messageCreate", async (msg) => {
     outChannel(msg);
     return;
   }
-  if (msg.content === "/gay") {
-    gayEcho(msg);
-    return;
-  }
 
   if (msg.member.voice.channel.id === connection.joinConfig.channelId) {
     await tts(msg.content);
@@ -96,16 +92,6 @@ const outChannel = (msg) => {
 
   connection.destroy();
   msg.reply("사이버 성대 장착 해제!");
-};
-
-const gayEcho = (msg) => {
-  msg.reply("유 서쳐 게이");
-  const resource = createAudioResource(
-    createReadStream("./sound/gay-echo.mp3")
-  );
-  const player = createAudioPlayer();
-  player.play(resource);
-  connection.subscribe(player);
 };
 
 const tts = async (msg) => {
