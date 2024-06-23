@@ -1,10 +1,14 @@
 import discord from "discord.js";
 import { GatewayIntentBits } from "discord.js";
-import { joinVoiceChannel } from "@discordjs/voice";
+import {
+  joinVoiceChannel,
+  createAudioPlayer,
+  createAudioResource,
+} from "@discordjs/voice";
 import dotenv from "dotenv";
+import { createReadStream } from "fs";
 
 dotenv.config();
-
 const client = new discord.Client({
   intents: [
     GatewayIntentBits.Guilds,
@@ -27,6 +31,9 @@ client.on("messageCreate", (msg) => {
   }
   if (msg.content === "/나가") {
     outChannel(msg);
+  }
+  if (msg.content === "/gay") {
+    gayEcho(msg);
   }
 });
 
@@ -51,11 +58,20 @@ const outChannel = (msg) => {
     msg.reply("마마 가까이 와서 이야기해도~ 채널밖에 있으면 안들린다~~");
     return;
   }
+
+  connection.destroy();
+  msg.reply("사이버 성대 장착 해제!");
+};
+
+const gayEcho = (msg) => {
+  msg.reply("유 서쳐 게이");
+  const resource = createAudioResource(createReadStream("./sound/gay-echo.mp3"));
+  const player = createAudioPlayer();
+  player.play(resource);
   const connection = joinVoiceChannel({
     channelId: msg.member.voice.channel.id,
     guildId: msg.guild.id,
     adapterCreator: msg.guild.voiceAdapterCreator,
   });
-  connection.destroy();
-  msg.reply("사이버 성대 장착 해제!");
+  connection.subscribe(player);
 };
