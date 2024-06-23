@@ -29,7 +29,10 @@ client.on("ready", () => {
 client.on("messageCreate", async (msg) => {
   if (msg.author.bot) return;
   console.log(`메세지${msg.content}`);
-
+  if (msg.content === "/설정") {
+    setting(msg);
+    return;
+  }
 
   if (msg.content === "/성대") {
     joinChannel(msg);
@@ -60,7 +63,9 @@ client.on("messageCreate", async (msg) => {
 client.login(process.env.TOKEN);
 /* 메세지 관련 처리 기능 구현 */
 
-
+const setting = (msg) => {
+  //TTS의 설정값을 바꿀 수 있는 기능
+};
 
 const joinChannel = (msg) => {
   if (!msg.member.voice.channel) {
@@ -123,7 +128,7 @@ const tts = async (msg) => {
     url: "https://typecast.ai/api/speak",
     headers: {
       "Content-Type": "application/json",
-      Authorization: "Bearer __plt5EUNnkp3tL9PGxjwSpKh6rZfBVM44qituwRGxvqH",
+      Authorization: process.env.TTS_TOKEN,
     },
     data: data,
   };
@@ -135,7 +140,7 @@ const tts = async (msg) => {
       const downloadUrlResponse = await axios.get(speakV2Url, {
         headers: {
           "Content-Type": "application/json",
-          Authorization: "Bearer __plt5EUNnkp3tL9PGxjwSpKh6rZfBVM44qituwRGxvqH",
+          Authorization: process.env.TTS_TOKEN,
         },
       });
 
