@@ -46,13 +46,13 @@ client.on("messageCreate", async (msg) => {
 
   if (msg.member.voice.channel.id === connection.joinConfig.channelId) {
     await tts(msg.content);
-  } 
+  }
 
   if (msg.content === "/검증") {
     if (msg.member.voice.channel === "#" + connection.joinConfig.channelId); //봇의 현재 음성 서버 주소
     {
       console.log("같은 방 확인");
-      await tts("나는 상후가 좋아요");
+      await tts("테스트로직");
     }
   }
 });
@@ -60,9 +60,11 @@ client.on("messageCreate", async (msg) => {
 client.login(process.env.TOKEN);
 /* 메세지 관련 처리 기능 구현 */
 
+
+
 const joinChannel = (msg) => {
   if (!msg.member.voice.channel) {
-    msg.reply("어느 채널에 있노! 안보인다!!");
+    msg.reply("사용자가 접속한 채널이 보이지 않습니다");
     return;
   }
   connection = joinVoiceChannel({
@@ -71,12 +73,14 @@ const joinChannel = (msg) => {
     adapterCreator: msg.guild.voiceAdapterCreator,
   });
 
-  msg.reply("사이버 성대 장착!");
+  msg.reply(
+    `사이버 성대 장착! 현재 메세지를 빠르게 입력하면 처음것이 짤리는 문제가 있으니 도배ㄴ , 분당 30쿼리 , 시간당 300쿼리`
+  );
 };
 
 const outChannel = (msg) => {
   if (!msg.member.voice.channel) {
-    msg.reply("마마 가까이 와서 이야기해도~ 채널밖에 있으면 안들린다~~");
+    msg.reply("채널 밖에서는 컨트롤 할 수 없습니다");
     return;
   }
   connection = joinVoiceChannel({
@@ -137,12 +141,11 @@ const tts = async (msg) => {
 
       return downloadUrlResponse.data;
     };
-    let downloadLink;
     const intervalId = setInterval(async () => {
       const data = await checkDownloadUrl();
       let breakTry = 0;
       if (breakTry > 10) {
-        console.log("10번찍어서 안넘어가는 TTS가 있네");
+        console.log("TTS가 뻗은거 같아요");
         clearInterval(intervalId);
       }
       if (data.result.audio_download_url) {
@@ -167,13 +170,3 @@ const say = async (url) => {
   player.play(resource);
   connection.subscribe(player);
 };
-
-// const gayEcho = (msg) => {
-//   msg.reply("유 서쳐 게이");
-//   const resource = createAudioResource(
-//     createReadStream("./sound/gay-echo.mp3")
-//   );
-//   const player = createAudioPlayer();
-//   player.play(resource);
-//   connection.subscribe(player);
-// };
