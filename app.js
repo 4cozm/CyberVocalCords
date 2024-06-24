@@ -100,10 +100,10 @@ const outChannel = (msg) => {
 
 const tts = async (msg) => {
   const data = JSON.stringify({
-    actor_id: "5c547544fcfee90007fed455",
+    actor_id: "632293f759d649937b97f323",
     text: msg,
     lang: "auto",
-    tempo: 1.2,
+    tempo: 1,
     volume: 100,
     pitch: 0,
     xapi_hd: true,
