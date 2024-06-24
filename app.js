@@ -23,36 +23,40 @@ const client = new discord.Client({
 });
 
 client.on("ready", () => {
-  console.log(`ready 이벤트 발생 ${client.user.tag}!`);
+  console.log(`서버 준비됨 ${client.user.tag}!`);
 });
 
 client.on("messageCreate", async (msg) => {
-  if (msg.author.bot) return;
-  console.log(`메세지${msg.content}`);
-  if (msg.content === "/설정") {
-    setting(msg);
-    return;
-  }
-
-  if (msg.content === "/성대") {
-    joinChannel(msg);
-    return;
-  }
-  if (msg.content === "/나가") {
-    outChannel(msg);
-    return;
-  }
-
-  if (msg.member.voice.channel.id === connection.joinConfig.channelId) {
-    await tts(msg.content);
-  }
-
-  if (msg.content === "/검증") {
-    if (msg.member.voice.channel === "#" + connection.joinConfig.channelId); //봇의 현재 음성 서버 주소
-    {
-      console.log("같은 방 확인");
-      await tts("테스트로직");
+  try {
+    if (msg.author.bot) return;
+    console.log(`메세지: ${msg.content}`);
+    if (msg.content === "/설정") {
+      setting(msg);
+      return;
     }
+
+    if (msg.content === "/성대") {
+      joinChannel(msg);
+      return;
+    }
+    if (msg.content === "/나가") {
+      outChannel(msg);
+      return;
+    }
+
+    if (msg.member.voice.channel.id === connection.joinConfig.channelId) {
+      await tts(msg.content);
+    }
+
+    if (msg.content === "/검증") {
+      if (msg.member.voice.channel === "#" + connection.joinConfig.channelId); //봇의 현재 음성 서버 주소
+      {
+        console.log("같은 방 확인");
+        await tts("테스트로직");
+      }
+    }
+  } catch (error) {
+    console.log({ 에러: error.message });
   }
 });
 
@@ -143,11 +147,8 @@ const tts = async (msg) => {
         clearInterval(intervalId); // 폴링 중지
         const downloadUrl = data.result.audio_download_url;
         say(downloadUrl);
-
-        // Discord로 음성 출력
-        // ...
       } else {
-        console.log("아직 준비되지 않음, 다시 시도...");
+        console.log("아직 준비되지 않음 다시 시도...");
       }
     }, 1000);
   });
